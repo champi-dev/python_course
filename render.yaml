@@ -1,0 +1,37 @@
+# Render Blueprint (chapter 39, deploy target: Render).
+# Declares the whole production stack — a Dockerized web service + a managed PostgreSQL —
+# the same "declare the desired state" idea as docker-compose, but for Render's cloud.
+# Apply it from the Render dashboard: New + > Blueprint > pick this repo.
+#
+# Render differs from the VPS/Caddy path: it TERMINATES TLS for you (automatic HTTPS on a
+# *.onrender.com domain) and runs a MANAGED Postgres — so no Caddy and no compose.prod.yaml
+# here. Render builds the Dockerfile and runs the container, injecting $PORT (entrypoint.sh
+# binds it) and X-Forwarded-Proto: https (SECURE_PROXY_SSL_HEADER trusts it — chapter 39).
+
+databases:
+  - name: devdiary-db
+    plan: free               # NOTE: Render's free Postgres is time-limited; upgrade for anything lasting
+    databaseName: devdiary
+    user: devdiary
+
+services:
+  - type: web
+    name: devdiary
+    runtime: docker
+    plan: free               # free web instances spin down when idle; first hit after is slow
+    dockerfilePath: ./devdiary_web/Dockerfile
+    dockerContext: ./devdiary_web
+    healthCheckPath: /accounts/login/   # returns 200 (the home page redirects, so check login)
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true            # Render generates a strong random key (fixes the W009 weak-key warning)
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"         # leading dot = match any *.onrender.com subdomain
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://*.onrender.com"   # full origin w/ scheme + wildcard (Django 4.0+)
+      - key: DATABASE_URL
+        fromDatabase:
+          name: devdiary-db
+          property: connectionString   # Render injects the managed Postgres URL

@@ -1,0 +1,13 @@
+# Secrets and per-environment config — must never enter version control.
+.env
+
+# The dev database is local data, not source code.
+db.sqlite3
+
+# collectstatic output — generated build artifact, regenerated on every deploy.
+staticfiles/
+
+# Python bytecode / caches.
+__pycache__/
+*.pyc
+.pytest_cache/

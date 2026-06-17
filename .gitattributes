@@ -1,0 +1,4 @@
+# Keep shell scripts LF-only so they run inside Linux containers (chapter 39).
+# Without this, a Windows checkout can rewrite entrypoint.sh to CRLF and the
+# container's `sh` fails with "entrypoint.sh: not found" (choking on the \r).
+*.sh text eol=lf

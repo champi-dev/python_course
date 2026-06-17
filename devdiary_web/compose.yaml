@@ -1,0 +1,46 @@
+# The WHOLE DevDiary stack — Django + PostgreSQL — declared in one file.
+# `docker compose up` builds, networks, and starts both services together.
+
+services:
+  # --- PostgreSQL: its own container, from the official image (no hand-install) ---
+  db:
+    image: postgres:17
+    environment:
+      # The official Postgres image reads these on FIRST start to create the
+      # database + superuser. This replaces chapter 35's manual "install + createdb".
+      POSTGRES_DB: devdiary
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      # Persist the DB files in a Docker-managed named volume so the data
+      # OUTLIVES the container (chapter 35's "ephemeral disk wipes data" fix).
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # pg_isready exits 0 only when Postgres actually ACCEPTS connections.
+      # `web` waits for this (below) so migrate doesn't race a not-yet-ready DB.
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # No `ports:` — nothing on the HOST needs to reach Postgres directly;
+    # only `web` does, over the private Compose network.
+
+  # --- Django app: built from our Dockerfile, talking to the db service ---
+  web:
+    build: .                    # build the image from ./Dockerfile (chapter 37)
+    ports:
+      - "8000:8000"             # publish container 8000 -> host 8000 (browser reaches the app)
+    environment:
+      SECRET_KEY: "django-insecure-dev-key-only-not-for-production"
+      DEBUG: "False"
+      ALLOWED_HOSTS: "localhost,127.0.0.1"
+      # Host is `db` — the SERVICE NAME on the private network, NOT
+      # host.docker.internal (chapter 37). The database is now inside the box.
+      DATABASE_URL: "postgres://postgres:postgres@db:5432/devdiary"
+    depends_on:
+      db:
+        condition: service_healthy   # don't start until db's healthcheck passes
+
+# Named volume Docker provisions + tracks; mounted by `db` above.
+volumes:
+  pgdata:

@@ -1,0 +1,20 @@
+[
+  {
+    "topic": "hello",
+    "minutes": 30,
+    "mood": "+",
+    "created_at": "2026-06-09T16:45:06.472183"
+  },
+  {
+    "topic": "py",
+    "minutes": 90,
+    "mood": "+",
+    "created_at": "2026-06-09T16:48:38.477235"
+  },
+  {
+    "topic": "<script>alert(\"pwned\")</script>",
+    "minutes": 13,
+    "mood": "+",
+    "created_at": "2026-06-12T14:01:11.106365"
+  }
+]

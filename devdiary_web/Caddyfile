@@ -1,0 +1,7 @@
+# Caddy config (chapter 39). Replace devdiary.example.com with your real domain.
+# Caddy automatically obtains and renews a free Let's Encrypt TLS certificate for it,
+# terminates HTTPS, and reverse-proxies plain HTTP to the web service (gunicorn) by
+# service name on the private Compose network.
+devdiary.example.com {
+    reverse_proxy web:8000
+}

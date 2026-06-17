@@ -1,0 +1,8 @@
+{% extends "diary/base.html" %}
+
+{% block title %}DevDiary — stats{% endblock %}
+
+{% block content %}
+  <p>Distinct topics: {{ distinct_topics }}</p>
+  <p>Total time: {{ total_minutes }} min</p>
+{% endblock %}

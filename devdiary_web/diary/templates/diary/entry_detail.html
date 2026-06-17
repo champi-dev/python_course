@@ -1,0 +1,26 @@
+{% extends "diary/base.html" %}
+
+{% block title %}DevDiary — {{ entry.topic }}{% endblock %}
+
+{% block content %}
+  <article class="card">
+    <h2>{{ entry.topic }}{% if entry.is_long %} 🔥{% endif %}</h2>
+
+    <p class="meta">
+      {{ entry.minutes }} min · mood: {{ entry.get_mood_display }}
+      · {{ entry.created_at|date:"M j, Y, g:i a" }}
+    </p>
+
+    {% if entry.notes %}
+      <p>{{ entry.notes }}</p>
+    {% else %}
+      <p class="muted">(no notes)</p>
+    {% endif %}
+  </article>
+
+  <p class="actions">
+    <a class="btn" href="{% url 'entry_edit' entry.pk %}">edit</a>
+    <a class="btn danger" href="{% url 'entry_delete' entry.pk %}">delete</a>
+    <a class="btn-link" href="{% url 'home' %}">← back</a>
+  </p>
+{% endblock %}

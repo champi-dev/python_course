@@ -1,0 +1,36 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}DevDiary{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'diary/style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h1>DevDiary</h1>
+
+    <nav>
+      <a href="{% url 'home' %}">diary</a> ·
+      <a href="{% url 'add_entry' %}">add</a> ·
+      <a href="{% url 'stats' %}">stats</a>
+      {% if user.is_authenticated %}
+        · <span class="muted">hi, {{ user.username }}</span> ·
+        <form method="post" action="{% url 'logout' %}" style="display:inline">
+          {% csrf_token %}
+          <button type="submit" class="btn-link">log out</button>
+        </form>
+      {% else %}
+        · <a href="{% url 'login' %}">log in</a>
+        · <a href="{% url 'signup' %}">sign up</a>
+      {% endif %}
+    </nav>
+
+    {% for message in messages %}
+      <p class="msg {{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>

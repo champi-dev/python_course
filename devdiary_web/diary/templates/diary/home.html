@@ -1,0 +1,18 @@
+{% extends "diary/base.html" %}
+
+{% block title %}DevDiary — diary{% endblock %}
+
+{% block content %}
+  <p class="meta">{{ entries|length }} entries — {{ total_minutes }} minutes studied</p>
+
+  <ul>
+    {% for entry in entries %}
+      <li>
+        <a href="{% url 'entry_detail' entry.pk %}">{{ entry.topic }}</a>
+        — {{ entry.minutes }} min ({{ entry.get_mood_display }}){% if entry.is_long %} 🔥{% endif %}
+      </li>
+    {% empty %}
+      <li>(no entries yet)</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

@@ -1,0 +1,79 @@
+:root {
+  --accent: #4f46e5;
+  --bg:     #f6f7fb;
+  --card:   #ffffff;
+  --line:   #e3e6ef;
+  --text:   #1f2430;
+  --muted:  #8a90a2;
+  --danger: #dc2626;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.container { max-width: 640px; margin: 0 auto; padding: 2rem 1.25rem; }
+
+h1 { margin: 0 0 .25rem; font-size: 1.7rem; }
+h2 { margin: 0 0 1rem; font-size: 1.25rem; }
+
+nav { margin-bottom: 1.5rem; color: var(--muted); }
+nav a { color: var(--accent); text-decoration: none; margin-right: .35rem; }
+nav a:hover { text-decoration: underline; }
+
+ul { list-style: none; padding: 0; margin: 0; }
+li {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: .75rem 1rem;
+  margin-bottom: .5rem;
+}
+li a { color: var(--text); text-decoration: none; font-weight: 600; }
+li a:hover { color: var(--accent); }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+.meta, .muted { color: var(--muted); font-size: .9rem; }
+
+.btn, button {
+  display: inline-block;
+  font: inherit;
+  padding: .45rem .9rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn:hover, button:hover { opacity: .9; }
+.btn.danger, button.danger { background: var(--danger); }
+.btn-link { color: var(--muted); text-decoration: none; margin-left: .5rem; }
+.actions { margin-top: 1rem; }
+
+input, select, textarea {
+  font: inherit;
+  width: 100%;
+  max-width: 360px;
+  padding: .4rem .5rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+form p { margin: .6rem 0; }
+label { font-weight: 600; }
+
+.msg { padding: .6rem .9rem; border-radius: 8px; margin-bottom: 1rem; }
+.msg.success { background: #e7f9ed; border: 1px solid #9bd7af; color: #176a32; }
+.msg.error   { background: #fdeaea; border: 1px solid #e0a3a3; color: #a11; }
+.msg.warning { background: #fff6e5; border: 1px solid #e8c98a; color: #8a5a00; }
